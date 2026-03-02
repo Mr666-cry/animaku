@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// PostgreSQL for Vercel (set POSTGRES_PRISMA_URL and POSTGRES_URL_NON_POOLING in Vercel)
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+// News/Updates from admin - visible to all users
+model News {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Notifications sent by admin - visible to all users with expiry
+model Notification {
+  id        String   @id @default(cuid())
+  message   String
+  expiresAt DateTime
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Visitor tracking
+model Visitor {
+  id        String   @id @default(cuid())
+  ipAddress String
+  userAgent String?
+  path      String?
+  createdAt DateTime @default(now())
+}
